@@ -22,19 +22,65 @@ Execute a classe `com.furb.app.Main`.
 
 ```mermaid
 classDiagram
-	class BookstoreFacade
-	class Order
-	class Product
-	class OrderSummary
+	class BookstoreFacade {
+		+Order createOrder()
+		+void addProduct(Order order, Product product)
+		+void setDeliveryType(Order order, DeliveryType deliveryType)
+		+OrderSummary checkout(Order order)
+	}
+	class Order {
+		+void addObserver(OrderObserver observer)
+		+void removeObserver(OrderObserver observer)
+		+void addProduct(Product product)
+		+void setDeliveryType(DeliveryType deliveryType)
+		+DeliveryType getDeliveryType()
+		+List~Product~ getProducts()
+		+int getTotalWeightGrams()
+		+double getTotalPrice()
+	}
+	class Product {
+		+Product(String name, double price, int weightGrams)
+		+String getName()
+		+double getPrice()
+		+int getWeightGrams()
+	}
+	class OrderSummary {
+		+OrderSummary(double productsTotal, double shippingCost, int totalWeightGrams, DeliveryType deliveryType)
+		+double getProductsTotal()
+		+double getShippingCost()
+		+double getGrandTotal()
+		+int getTotalWeightGrams()
+		+DeliveryType getDeliveryType()
+		+String toString()
+	}
 	class DeliveryType
-	class ShippingService
-	class DeliveryStrategyFactory
-	class DeliveryStrategy
-	class PacDeliveryStrategy
-	class SedexDeliveryStrategy
-	class PickupDeliveryStrategy
-	class OrderObserver
-	class ConsoleOrderObserver
+	class ShippingService {
+		+static ShippingService getInstance()
+		+double calculateShippingCost(Order order)
+	}
+	class DeliveryStrategyFactory {
+		+DeliveryStrategy createStrategy(DeliveryType deliveryType)
+	}
+	class DeliveryStrategy {
+		<<interface>>
+		+double calculateShippingCost(int totalWeightGrams)
+	}
+	class PacDeliveryStrategy {
+		+double calculateShippingCost(int totalWeightGrams)
+	}
+	class SedexDeliveryStrategy {
+		+double calculateShippingCost(int totalWeightGrams)
+	}
+	class PickupDeliveryStrategy {
+		+double calculateShippingCost(int totalWeightGrams)
+	}
+	class OrderObserver {
+		<<interface>>
+		+void onOrderUpdated(Order order, String event)
+	}
+	class ConsoleOrderObserver {
+		+void onOrderUpdated(Order order, String event)
+	}
 
 	BookstoreFacade --> ShippingService
 	BookstoreFacade --> Order
@@ -55,7 +101,6 @@ classDiagram
 	Order --> OrderObserver
 	OrderObserver <|.. ConsoleOrderObserver
 ```
-
 ## Testes
 
 Os testes estão em `trabalho1/src/test/java`.
