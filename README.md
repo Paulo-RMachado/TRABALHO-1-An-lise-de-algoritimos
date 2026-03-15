@@ -18,6 +18,44 @@ Execute a classe `com.furb.app.Main`.
 - `com.furb.facade`: fachada de acesso ao fluxo.
 - `com.furb.app`: ponto de entrada.
 
+## UML
+
+```mermaid
+classDiagram
+	class BookstoreFacade
+	class Order
+	class Product
+	class OrderSummary
+	class DeliveryType
+	class ShippingService
+	class DeliveryStrategyFactory
+	class DeliveryStrategy
+	class PacDeliveryStrategy
+	class SedexDeliveryStrategy
+	class PickupDeliveryStrategy
+	class OrderObserver
+	class ConsoleOrderObserver
+
+	BookstoreFacade --> ShippingService
+	BookstoreFacade --> Order
+	BookstoreFacade --> OrderSummary
+	BookstoreFacade --> DeliveryType
+	BookstoreFacade --> Product
+
+	ShippingService --> DeliveryStrategyFactory
+	ShippingService --> DeliveryStrategy
+	DeliveryStrategyFactory --> DeliveryStrategy
+
+	DeliveryStrategy <|.. PacDeliveryStrategy
+	DeliveryStrategy <|.. SedexDeliveryStrategy
+	DeliveryStrategy <|.. PickupDeliveryStrategy
+
+	Order --> Product
+	Order --> DeliveryType
+	Order --> OrderObserver
+	OrderObserver <|.. ConsoleOrderObserver
+```
+
 ## Testes
 
 Os testes estão em `trabalho1/src/test/java`.
